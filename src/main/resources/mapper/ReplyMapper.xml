@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.ReplyMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.Reply">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="REPLYID" jdbcType="NUMERIC" property="replyid" />
+    <result column="POSTID" jdbcType="NUMERIC" property="postid" />
+    <result column="POSTERID" jdbcType="VARCHAR" property="posterid" />
+    <result column="POSTINGTIME" jdbcType="TIMESTAMP" property="postingtime" />
+    <result column="REPLYBODY" jdbcType="CLOB" property="replybody" />
+  </resultMap>
+</mapper>

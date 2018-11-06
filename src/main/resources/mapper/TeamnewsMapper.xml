@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.TeamNewsMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.TeamNews">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="NEWSID" jdbcType="NUMERIC" property="newsid" />
+    <id column="TEAMID" jdbcType="NUMERIC" property="teamid" />
+    <result column="ADDTIME" jdbcType="TIMESTAMP" property="addtime" />
+  </resultMap>
+</mapper>
