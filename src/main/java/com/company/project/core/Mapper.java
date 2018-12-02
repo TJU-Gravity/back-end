@@ -13,5 +13,6 @@ public interface Mapper<T>
         BaseMapper<T>,
         ConditionMapper<T>,
         IdsMapper<T>,
-        InsertListMapper<T> {
+        InsertListMapper<T>,
+        SelectMapper<T>{
 }
