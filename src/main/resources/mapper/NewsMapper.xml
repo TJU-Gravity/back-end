@@ -18,4 +18,10 @@
     <result column="HITS" jdbcType="NUMERIC" property="hits" />
     <result column="NEWSBODY" jdbcType="CLOB" property="newsbody" />
   </resultMap>
+  <select id="getFavoritesByUsername" parameterType="String" resultType="com.company.project.model.News">
+    SELECT * FROM news WHERE newsid IN (SELECT newsid FROM usernews WHERE username=#{username})
+  </select>
+  <select id="findById" parameterType="BigDecimal" resultType="com.company.project.model.News">
+    SELECT * FROM news WHERE newsid=#{id}
+  </select>
 </mapper>

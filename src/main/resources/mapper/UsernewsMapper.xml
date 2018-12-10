@@ -9,4 +9,5 @@
     <id column="USERNAME" jdbcType="VARCHAR" property="username" />
     <result column="ADDTIME" jdbcType="TIMESTAMP" property="addtime" />
   </resultMap>
+
 </mapper>

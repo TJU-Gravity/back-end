@@ -18,4 +18,7 @@
     <result column="STATUS" jdbcType="NUMERIC" property="status" />
     <result column="TAGS" jdbcType="ARRAY" property="tags" />
   </resultMap>
+  <select id="findByUsername" parameterType="String" resultType="com.company.project.model.user">
+    SELECT * FROM guser WHERE username=#{username}
+  </select>
 </mapper>
