@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
-public class UserNews {
+public class Usernews {
     @Id
     @Column(name = "NEWSID")
     private BigDecimal newsid;

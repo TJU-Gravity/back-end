@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface NewsMapper extends Mapper<News> {
-    public List<News> getFavoritesByUsername(String username);
+
     public News findById(BigDecimal id);
+    public void deleteById(BigDecimal id);
 }

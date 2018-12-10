@@ -21,15 +21,15 @@ public class NewsServiceImpl extends AbstractService<News> implements NewsServic
     @Resource
     private NewsMapper newsMapper;
 
-    @Override
-    public List<News> getFavorites(String username)
-    {
-        List<News> favorites=newsMapper.getFavoritesByUsername(username);
-        return favorites;
-    }
+
     @Override
     public News findById(BigDecimal id){
         return newsMapper.findById(id);
+
+    }
+    @Override
+    public void deleteById(BigDecimal id){
+         newsMapper.deleteById(id);
 
     }
 }

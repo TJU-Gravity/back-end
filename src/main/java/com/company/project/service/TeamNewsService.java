@@ -1,11 +1,11 @@
 package com.company.project.service;
-import com.company.project.model.TeamNews;
+import com.company.project.model.Teamnews;
 import com.company.project.core.Service;
 
 
 /**
- * Created by CodeGenerator on 2018/11/06.
+ * Created by CodeGenerator on 2018/12/10.
  */
-public interface TeamNewsService extends Service<TeamNews> {
+public interface TeamnewsService extends Service<Teamnews> {
 
 }

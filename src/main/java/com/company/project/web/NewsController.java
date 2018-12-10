@@ -3,8 +3,6 @@ import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
 import com.company.project.model.News;
 import com.company.project.service.NewsService;
-import com.company.project.service.UserNewsService;
-import com.company.project.service.impl.UserNewsServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,13 +26,14 @@ public class NewsController {
 
     @PostMapping("/add")
     public Result add(News news) {
+
         newsService.save(news);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
-        newsService.deleteById(id);
+        newsService.deleteById(BigDecimal.valueOf(id));
         return ResultGenerator.genSuccessResult();
     }
 
@@ -78,21 +77,5 @@ public class NewsController {
         return ResultGenerator.genSuccessResult(pageInfo);
     }
 
-    //未通过测试
-    @PostMapping("/favorites")
-    public Result favorites(@RequestParam(defaultValue = "null") String username,@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        if(username.equals("null"))
-        {
-            return ResultGenerator.genFailResult("need non null username");
-        }
-        else
-        {
-            PageHelper.startPage(page, size);
-            List<News> list = newsService.getFavorites(username);
-            PageInfo pageInfo = new PageInfo(list);
-            return ResultGenerator.genSuccessResult(pageInfo);
 
-        }
-
-    }
 }

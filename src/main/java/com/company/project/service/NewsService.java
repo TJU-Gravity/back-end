@@ -10,6 +10,7 @@ import java.util.List;
  * Created by CodeGenerator on 2018/11/06.
  */
 public interface NewsService extends Service<News> {
-    public List<News> getFavorites(String username);
+
     public News findById(BigDecimal id);
+    public void deleteById(BigDecimal id);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.company.project.dao.UserNewsMapper">
-  <resultMap id="BaseResultMap" type="com.company.project.model.UserNews">
+<mapper namespace="com.company.project.dao.UsernewsMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.Usernews">
     <!--
       WARNING - @mbg.generated
     -->
@@ -9,5 +9,10 @@
     <id column="USERNAME" jdbcType="VARCHAR" property="username" />
     <result column="ADDTIME" jdbcType="TIMESTAMP" property="addtime" />
   </resultMap>
-
+  <delete id="deleteLike" parameterType="com.company.project.model.Usernews">
+    DELETE FROM usernews WHERE newsid=#{newsid} AND username=#{username}
+  </delete>
+  <select id="getFavoritesByUsername" parameterType="String" resultType="com.company.project.model.News">
+    SELECT * FROM news WHERE newsid IN (SELECT newsid FROM usernews WHERE username=#{username})
+  </select>
 </mapper>
