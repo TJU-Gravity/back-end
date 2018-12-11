@@ -7,16 +7,16 @@ import javax.persistence.*;
 public class Team {
     @Id
     @Column(name = "TEAMID")
-    private BigDecimal teamid;
+    private int teamid;
 
     @Column(name = "TEAMNAME")
     private String teamname;
 
     @Column(name = "CAPTAINID")
-    private String captainid;
+    private Integer captainid;
 
     @Column(name = "MEMBERNUM")
-    private Short membernum;
+    private int membernum;
 
     @Column(name = "CREATEDATE")
     private Date createdate;
@@ -33,15 +33,15 @@ public class Team {
     /**
      * @return TEAMID
      */
-    public BigDecimal getTeamid() {
+    public int getTeamid() {
         return teamid;
     }
 
     /**
-     * @param teamid
+     * @param i
      */
-    public void setTeamid(BigDecimal teamid) {
-        this.teamid = teamid;
+    public void setTeamid(int i) {
+        this.teamid = i;
     }
 
     /**
@@ -61,29 +61,29 @@ public class Team {
     /**
      * @return CAPTAINID
      */
-    public String getCaptainid() {
+    public Integer getCaptainid() {
         return captainid;
     }
 
     /**
      * @param captainid
      */
-    public void setCaptainid(String captainid) {
+    public void setCaptainid(int captainid) {
         this.captainid = captainid;
     }
 
     /**
      * @return MEMBERNUM
      */
-    public Short getMembernum() {
+    public int getMembernum() {
         return membernum;
     }
 
     /**
-     * @param membernum
+     * @param i
      */
-    public void setMembernum(Short membernum) {
-        this.membernum = membernum;
+    public void setMembernum(int i) {
+        this.membernum = i;
     }
 
     /**

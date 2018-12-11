@@ -1,15 +1,24 @@
 package com.company.project.web;
+import com.alibaba.fastjson.JSONObject;
 import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
-import com.company.project.model.Team;
+import com.company.project.model.*;
 import com.company.project.service.TeamService;
+import com.company.project.service.userService;
+import com.company.project.service.tagService;
+import com.company.project.service.TeamuserService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+
+import tk.mybatis.mapper.entity.Condition;
+
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.annotation.Resource;
@@ -21,54 +30,16 @@ import java.util.List;
 @RestController
 @RequestMapping("/team")
 
-public class TeamInfo{
-
-    String teamname;
-    String captainname;
-    Short membernum;
-    Date createdate;
-    ArrayList<String> member;
-    String headshort;
-    String  introduction;
-    //tags...
-
-    public void setTeamname(String teamname)
-    {this.teamname=teamname;}
-     public void setCaptainname(String captainName)
-    {this.captainname=captainname;}
-     public void setMembernum(Short membernum)
-    {this.membernum=membernum;}
-     public void setCreatedate(Date createdate)
-    {this.createdate=createdate;}
-     public void setMember(List<String> member)
-    {this.member=member;}
-     public void setHeadshot(String headshort)
-    {this.headshort=headshort;}
-
-     String void getTeamname()
-    {return teamname;}
-     public String getCaptainname()
-    {return captainname;}
-     public Short getMembernum()
-    {return membernum}
-     public Date getCreatedate()
-    {return createdate;}
-     public List<String> getMember()
-    {return member;}
-     public Strirng getHeadshot()
-    {return headshort;}
-
-}
-
 public class TeamController {
+	
     @Resource
     private TeamService teamService;
     @Resource
-    private TeamUserService teamUserService;
+    private TeamuserService teamUserService;
     @Resource
-    private UserService userService;
+    private userService userService;
     @Resource
-    private TagService tagService;
+    private tagService tagService;
     
     //1.
     //请求创建团队
@@ -76,9 +47,12 @@ public class TeamController {
     @PostMapping("/createTeam")
     public Result createTeam(@RequestBody Team newTeam) {
         //获取当前团队数量
-        BigDecimal teamNum=teamService.selectCount(new Team());
+        int teamNum=teamService.selectCount(new Team());
         //团队id
         newTeam.setTeamid(teamNum+1);
+        //创建时间
+        Date date = new Date();// 获取当前时间 
+        newTeam.setCreatedate(date);
         teamService.save(newTeam);
         return ResultGenerator.genSuccessResult();
     }
@@ -86,33 +60,34 @@ public class TeamController {
   
     //2.
     //请求加入团队
-    //参数：用户id，团队id
+    //参数：用户名，团队id
     @PostMapping("/addTeammate")
-    public Result addTeammate(@RequestParam BigDecimal userId,@RequestParam BigDecimal teamId) {
+    public Result addTeammate(@RequestParam String username,@RequestParam int teamId) {
         //根据id查询用户名
-        User teammate=userService.findById(userId);
-        String uName=teammate.getName();
+        //user teammate=userService.findByUsername(username);
+        //String uName=teammate.getUsername();
 
         //插入TeamUser表
-        TeamUser teamuser=new TeamUser();
+        Teamuser teamuser=new Teamuser();
         teamuser.setTeamid(teamId);
-        teamuser.setUsername(uName);
+        teamuser.setUsername(username);
         //获取系统当前时间
         //SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间 
         //sdf.applyPattern("yyyy-MM-dd");
         Date date = new Date();// 获取当前时间 
         //sdf.format(date);
-        teamuser.setAdddate=date;
+        teamuser.setAdddate(date);
         teamUserService.save(teamuser);
 
         //更新Team表(membernum)
         Team team=teamService.findById(teamId);
-        team.setMembernum(team.membernum+1);
+        team.setMembernum(team.getMembernum()+1);
         teamService.update(team);
 
         return ResultGenerator.genSuccessResult();
     }
 
+    /*
     //3.
     //请求查询团队列表
     //参数：团队类型
@@ -132,6 +107,7 @@ public class TeamController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+    */
 
     //4.
     //请求查询团队信息：基本信息+队员信息
@@ -140,28 +116,37 @@ public class TeamController {
     @PostMapping("/teamDetail")
     public Result teamDetail(@RequestParam Integer id) {
         Team team = teamService.findById(id);
-        TeamInfo teamInfo=new TeamInfo();
-        teamInfo.
-        teamInfo.setTeamname(team.teamname);
+        JSONObject teamInfo=new JSONObject();
+        //队名
+        teamInfo.put("teamname",team.getTeamname());
         //队长姓名
-        teamInfo.setCaptainname(userService.findById(team.captainId).name);
-
-        teamInfo.setMembernum(team.membernum);
-        teamInfo.setCreatedate(team.createdate);
-        teamInfo.setHeadshort(team.headshort);
-        teamInfo.setIntroduction(team.introduction);
+        user captain=userService.findById(team.getCaptainid());
+        teamInfo.put("captainName",team.getCaptainid());
+        //创建时间
+        teamInfo.put("createDate",team.getCreatedate());
+        //团队头像url
+        teamInfo.put("headshot",team.getHeadshot());
+        //成员数量
+        int membernum=team.getMembernum();
+        teamInfo.put("membernum",membernum);
+        //团队简介
+        teamInfo.put("introduction",team.getIntroduction());
 
         //查询TeamUser中的队员信息
-        Condition condition=new Condition(TeamUser.class);
-        String teamIdStr=membernum.toString();
+        Condition condition=new Condition(Teamuser.class);
+        String teamIdStr=String.valueOf(team.getTeamid());
+        //查询条件
         condition.createCriteria().andCondition("teamid="+teamIdStr);
-        List<TeamUser> list=teamUserService.findByCondition(condition);
-        List<String> userlist;
-        for(TeamUser x:list)
+        //获取成员列表
+        List<Teamuser> list=teamUserService.findByCondition(condition);
+        String[] userlist=new String[membernum];
+        int index=0;
+        for(Teamuser x:list)
         {
-            userlist.add(x.username);
+            userlist[index]=x.getUsername();
+            index=index+1;
         }
-        teamInfo.setMember(userlist);
+        teamInfo.put("userlist",userlist);
 
         return ResultGenerator.genSuccessResult(teamInfo);
     }
@@ -184,12 +169,12 @@ public class TeamController {
         //更新Team表
         teamService.deleteById(id);
         //更新TeamUser表
-        Condition condition=new Condition(TeamUser.class);
-        String teamIdStr=membernum.toString();
+        Condition condition=new Condition(Teamuser.class);
+        String teamIdStr=id.toString();
         condition.createCriteria().andCondition("teamid="+teamIdStr);
-        List<TeamUser> list=teamUserService.findByCondition(condition);
+        List<Teamuser> list=teamUserService.findByCondition(condition);
         List<String> userlist;
-        for(TeamUser x:list)
+        for(Teamuser x:list)
         {
         teamUserService.delete(x);
         }
@@ -199,23 +184,53 @@ public class TeamController {
 
     //7.
     //请求移除队员
-    //参数：队员id,团队id
+    //参数：队员名字,团队id
     @PostMapping("/deleteTeammate")
-    public Result deleteTeammate(@RequestParam BigDecimal userId,@RequestParam BigDecimal teamId) {
+    public Result deleteTeammate(@RequestParam String userName,@RequestParam int teamId) {
         //postService.deleteById(id);
-         //根据id查询用户名
-        User teammate=userService.findById(userId);
-        String uName=teammate.getName();
+         
+        //user teammate=userService.findById(userId);
+        //String uName=teammate.getUsername();
 
         //删除TeamUser表
-        TeamUser teamuser=new TeamUser();
-        //...
+        Teamuser teamuser=new Teamuser();
+        Condition condition=new Condition(Teamuser.class);
+        condition.createCriteria().andCondition("username="+userName+"and teamId="+String.valueOf(teamId));
+        List<Teamuser> deleteList=teamUserService.findByCondition(condition);
+        for(Teamuser d:deleteList)
+        {
+        	teamUserService.delete(d);
+        }
         //更新Team表(membernum)
         Team team=teamService.findById(teamId);
-        team.setMembernum(team.membernum-1);
+        team.setMembernum(team.getMembernum()-1);
         teamService.update(team);
 
         return ResultGenerator.genSuccessResult();
     } 
+    
+    //8.
+    //请求查询某个用户的团队列表
+    //参数：用户名
+    //返回：团队列表
+    @PostMapping("/myTeamList")
+    public Result myTeamList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
+    @RequestBody String userName) {
+        PageHelper.startPage(page, size);
+        
+        //根据用户名查询
+        Condition condition=new Condition(Teamuser.class);
+        
+        condition.createCriteria().andCondition("username="+userName);
+        List<Teamuser> teamUserList=teamUserService.findByCondition(condition);
+        List<Team> teamList=new ArrayList();
+        //根据teamId查询team信息
+        for(Teamuser x:teamUserList)
+        {
+            teamList.add(teamService.findById(x.getTeamid()));
+        }
+        PageInfo pageInfo = new PageInfo(teamList);
+        return ResultGenerator.genSuccessResult(pageInfo);
+    }
 
 }

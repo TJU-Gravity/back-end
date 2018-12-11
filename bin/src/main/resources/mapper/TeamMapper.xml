@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.TeamMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.Team">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="TEAMID" jdbcType="NUMERIC" property="teamid" />
+    <result column="TEAMNAME" jdbcType="VARCHAR" property="teamname" />
+    <result column="CAPTAINID" jdbcType="VARCHAR" property="captainid" />
+    <result column="MEMBERNUM" jdbcType="NUMERIC" property="membernum" />
+    <result column="CREATEDATE" jdbcType="TIMESTAMP" property="createdate" />
+    <result column="HEADSHOT" jdbcType="VARCHAR" property="headshot" />
+    <result column="INTRODUCTION" jdbcType="VARCHAR" property="introduction" />
+    <result column="TAGS" jdbcType="ARRAY" property="tags" />
+  </resultMap>
+</mapper>

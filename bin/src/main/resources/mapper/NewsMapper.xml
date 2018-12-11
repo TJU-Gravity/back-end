@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.company.project.dao.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.company.project.model.News">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="NEWSID" jdbcType="NUMERIC" property="newsid" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="TAGS" jdbcType="ARRAY" property="tags" />
+    <result column="EDITORID" jdbcType="VARCHAR" property="editorid" />
+    <result column="SPONSOR" jdbcType="VARCHAR" property="sponsor" />
+    <result column="REGISTRATIONSTARTDATE" jdbcType="TIMESTAMP" property="registrationstartdate" />
+    <result column="REGISTRATIONENDDATE" jdbcType="TIMESTAMP" property="registrationenddate" />
+    <result column="CONTESTSTARTDATE" jdbcType="TIMESTAMP" property="conteststartdate" />
+    <result column="CONTESTENDDATE" jdbcType="TIMESTAMP" property="contestenddate" />
+    <result column="POSTER" jdbcType="VARCHAR" property="poster" />
+    <result column="HITS" jdbcType="NUMERIC" property="hits" />
+    <result column="NEWSBODY" jdbcType="CLOB" property="newsbody" />
+  </resultMap>
+</mapper>

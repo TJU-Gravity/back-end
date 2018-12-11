@@ -77,7 +77,7 @@ public abstract class AbstractService<T> implements Service<T> {
         return mapper.selectCount(model);
     }
 
-    int delete(T model){
+    public int delete(T model){
         return mapper.delete(model);
     }
 }

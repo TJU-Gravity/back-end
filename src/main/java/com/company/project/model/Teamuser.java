@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Teamuser {
     @Id
     @Column(name = "TEAMID")
-    private BigDecimal teamid;
+    private int teamid;
 
 
     @Column(name = "USERNAME")
@@ -19,15 +19,15 @@ public class Teamuser {
     /**
      * @return TEAMID
      */
-    public BigDecimal getTeamid() {
+    public int getTeamid() {
         return teamid;
     }
 
     /**
-     * @param teamid
+     * @param teamId2
      */
-    public void setTeamid(BigDecimal teamid) {
-        this.teamid = teamid;
+    public void setTeamid(int teamId2) {
+        this.teamid = teamId2;
     }
 
     /**
