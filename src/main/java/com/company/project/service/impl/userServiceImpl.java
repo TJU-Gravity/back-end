@@ -18,5 +18,10 @@ import javax.annotation.Resource;
 public class userServiceImpl extends AbstractService<user> implements userService {
     @Resource
     private userMapper guserMapper;
+    public user findByUsername(String username)
+    {
+        return guserMapper.findByUsername(username);
+    }
+
 
 }

@@ -1,8 +1,8 @@
 package com.company.project.web;
 import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
-import com.company.project.model.user;
-import com.company.project.service.userService;
+import com.company.project.model.Teamnews;
+import com.company.project.service.TeamnewsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,42 +14,42 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
-* Created by CodeGenerator on 2018/11/06.
+* Created by CodeGenerator on 2018/12/10.
 */
 @RestController
-@RequestMapping("/user")
-public class userController {
+@RequestMapping("/teamnews")
+public class TeamnewsController {
     @Resource
-    private userService userService;
+    private TeamnewsService teamnewsService;
 
     @PostMapping("/add")
-    public Result add(user user) {
-        userService.save(user);
+    public Result add(Teamnews teamnews) {
+        teamnewsService.save(teamnews);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
-        userService.deleteById(id);
+        teamnewsService.deleteById(id);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/update")
-    public Result update(user user) {
-        userService.update(user);
+    public Result update(Teamnews teamnews) {
+        teamnewsService.update(teamnews);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam String username) {
-        user user = userService.findByUsername(username);
-        return ResultGenerator.genSuccessResult(user);
+    public Result detail(@RequestParam Integer id) {
+        Teamnews teamnews = teamnewsService.findById(id);
+        return ResultGenerator.genSuccessResult(teamnews);
     }
 
     @PostMapping("/list")
     public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
-        List<user> list = userService.findAll();
+        List<Teamnews> list = teamnewsService.findAll();
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

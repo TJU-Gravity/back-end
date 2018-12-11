@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -22,15 +23,17 @@ public class NewsController {
     @Resource
     private NewsService newsService;
 
+
     @PostMapping("/add")
     public Result add(News news) {
+
         newsService.save(news);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/delete")
     public Result delete(@RequestParam Integer id) {
-        newsService.deleteById(id);
+        newsService.deleteById(BigDecimal.valueOf(id));
         return ResultGenerator.genSuccessResult();
     }
 
@@ -42,15 +45,37 @@ public class NewsController {
 
     @PostMapping("/detail")
     public Result detail(@RequestParam Integer id) {
-        News news = newsService.findById(id);
+        News news = newsService.findById(BigDecimal.valueOf(id));
+        return ResultGenerator.genSuccessResult(news);
+    }
+    @PostMapping("/like")
+    public Result like(@RequestParam Integer newsid,@RequestParam String username) {
+        News news = newsService.findById(BigDecimal.valueOf(newsid));
         return ResultGenerator.genSuccessResult(news);
     }
 
     @PostMapping("/list")
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+    public Result list(@RequestParam(defaultValue = "default") String sortedBy,@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
         PageHelper.startPage(page, size);
-        List<News> list = newsService.findAll();
+        List<News> list;
+        if(sortedBy.equals("contestTime"))
+        {//未实现
+            list = newsService.findAll();
+
+        }
+        else if(sortedBy.equals("publishTime"))
+        {//未实现
+            list = newsService.findAll();
+
+        }else
+        {
+            list = newsService.findAll();
+
+        }
+
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+
+
 }

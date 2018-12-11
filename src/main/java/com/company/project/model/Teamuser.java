@@ -4,30 +4,30 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
-public class UserNews {
+public class Teamuser {
     @Id
-    @Column(name = "NEWSID")
-    private BigDecimal newsid;
+    @Column(name = "TEAMID")
+    private BigDecimal teamid;
 
 
     @Column(name = "USERNAME")
     private String username;
 
-    @Column(name = "ADDTIME")
-    private Date addtime;
+    @Column(name = "ADDDATE")
+    private Date adddate;
 
     /**
-     * @return NEWSID
+     * @return TEAMID
      */
-    public BigDecimal getNewsid() {
-        return newsid;
+    public BigDecimal getTeamid() {
+        return teamid;
     }
 
     /**
-     * @param newsid
+     * @param teamid
      */
-    public void setNewsid(BigDecimal newsid) {
-        this.newsid = newsid;
+    public void setTeamid(BigDecimal teamid) {
+        this.teamid = teamid;
     }
 
     /**
@@ -45,16 +45,16 @@ public class UserNews {
     }
 
     /**
-     * @return ADDTIME
+     * @return ADDDATE
      */
-    public Date getAddtime() {
-        return addtime;
+    public Date getAdddate() {
+        return adddate;
     }
 
     /**
-     * @param addtime
+     * @param adddate
      */
-    public void setAddtime(Date addtime) {
-        this.addtime = addtime;
+    public void setAdddate(Date adddate) {
+        this.adddate = adddate;
     }
 }

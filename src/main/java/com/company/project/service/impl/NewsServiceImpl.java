@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -19,4 +21,15 @@ public class NewsServiceImpl extends AbstractService<News> implements NewsServic
     @Resource
     private NewsMapper newsMapper;
 
+
+    @Override
+    public News findById(BigDecimal id){
+        return newsMapper.findById(id);
+
+    }
+    @Override
+    public void deleteById(BigDecimal id){
+         newsMapper.deleteById(id);
+
+    }
 }
