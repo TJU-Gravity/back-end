@@ -14,4 +14,10 @@
     <result column="INTRODUCTION" jdbcType="VARCHAR" property="introduction" />
     <result column="TAGS" jdbcType="ARRAY" property="tags" />
   </resultMap>
-</mapper>
+  <select id="findById" parameterType="BigDecimal" resultType="com.company.project.model.Team">
+  SELECT * FROM team WHERE teamid=#{id}
+  </select>
+  <delete id="deleteById" parameterType="BigDecimal">
+  DELETE FROM team WHERE teamid=#{id}
+  </delete>
+  </mapper>

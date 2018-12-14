@@ -2,7 +2,7 @@ package com.company.project.service;
 import com.company.project.model.News;
 import com.company.project.model.user;
 import com.company.project.core.Service;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+//import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 
 import java.util.List;
 
