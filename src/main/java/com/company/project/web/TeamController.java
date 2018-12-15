@@ -188,23 +188,28 @@ public class TeamController {
     //7.
     //请求移除队员
     //参数：队员名字,团队id
-//    @PostMapping("/deleteTeammate")
-//    public Result deleteTeammate(@RequestParam String userName,@RequestParam Integer teamId) {
-//        
-//        //删除TeamUser表
-//        Teamuser teamuser=new Teamuser();
-//        List<Teamuser> deleteList=teamUserService.findTeamuser(userName,BigDecimal.valueOf(teamId));
-//        for(Teamuser d:deleteList)
-//        {
-//        	teamUserService.delete(d);
-//        }
-//        //更新Team表(membernum)
-//        Team team=teamService.findById(BigDecimal.valueOf(teamId));
-//        team.setMembernum((short)(team.getMembernum()-1));
-//        teamService.update(team);
-//
-//        return ResultGenerator.genSuccessResult();
-//    } 
+    @PostMapping("/deleteTeammate")
+    public Result deleteTeammate(@RequestParam String userName,@RequestParam Integer teamId) {
+        
+        //删除TeamUser表
+        Teamuser teamuser=new Teamuser();
+        List<Teamuser> deleteList=teamUserService.findTeamuser(userName,BigDecimal.valueOf(teamId));
+        if(!deleteList.isEmpty())
+        {
+        	for(Teamuser d:deleteList)
+        	 {
+            	teamUserService.delete(d);
+            }
+        	 //更新Team表(membernum)
+            Team team=teamService.findById(BigDecimal.valueOf(teamId));
+            team.setMembernum((short)(team.getMembernum()-1));
+            teamService.update(team);
+        }
+       
+       
+
+        return ResultGenerator.genSuccessResult();
+    } 
     
     //8.
     //请求查询某个用户的团队列表

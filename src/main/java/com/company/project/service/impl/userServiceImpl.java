@@ -7,6 +7,8 @@ import com.company.project.core.AbstractService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 
@@ -22,6 +24,9 @@ public class userServiceImpl extends AbstractService<user> implements userServic
     {
         return guserMapper.findByUsername(username);
     }
+    public List<user> findUser(String userName, String password) {
+		return guserMapper.findUser(userName,password);
+	}
 
 
 }
