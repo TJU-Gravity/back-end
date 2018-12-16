@@ -38,9 +38,6 @@ public class user {
     @Column(name = "STATUS")
     private Short status;
 
-    @Column(name = "TAGS")
-    private Object tags;
-
     /**
      * @return USERNAME
      */
@@ -195,17 +192,5 @@ public class user {
         this.status = status;
     }
 
-    /**
-     * @return TAGS
-     */
-    public Object getTags() {
-        return tags;
-    }
 
-    /**
-     * @param tags
-     */
-    public void setTags(Object tags) {
-        this.tags = tags;
-    }
 }

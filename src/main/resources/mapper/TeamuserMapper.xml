@@ -9,4 +9,10 @@
     <id column="USERNAME" jdbcType="VARCHAR" property="username" />
     <result column="ADDDATE" jdbcType="TIMESTAMP" property="adddate" />
   </resultMap>
+   <select id="findByUsername" parameterType="String" resultType="com.company.project.model.Teamuser">
+    SELECT * FROM teamuser WHERE username=#{userName}
+  </select>
+  <select id="findTeamuser" resultType="com.company.project.model.Teamuser">
+    SELECT * FROM teamuser WHERE username=#{arg0} and teamid=#{arg1}
+  </select>
 </mapper>

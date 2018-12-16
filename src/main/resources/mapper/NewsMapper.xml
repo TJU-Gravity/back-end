@@ -7,7 +7,7 @@
     -->
     <id column="NEWSID" jdbcType="NUMERIC" property="newsid" />
     <result column="TITLE" jdbcType="VARCHAR" property="title" />
-    <result column="TAGS" jdbcType="ARRAY" property="tags" />
+
     <result column="EDITORID" jdbcType="VARCHAR" property="editorid" />
     <result column="SPONSOR" jdbcType="VARCHAR" property="sponsor" />
     <result column="REGISTRATIONSTARTDATE" jdbcType="TIMESTAMP" property="registrationstartdate" />

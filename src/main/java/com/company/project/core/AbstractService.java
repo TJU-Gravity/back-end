@@ -72,4 +72,12 @@ public abstract class AbstractService<T> implements Service<T> {
     public List<T> findAll() {
         return mapper.selectAll();
     }
+    
+    public int selectCount(T model){
+        return mapper.selectCount(model);
+    }
+
+    public int delete(T model){
+        return mapper.delete(model);
+    }
 }

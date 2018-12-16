@@ -12,8 +12,7 @@ public class News {
     @Column(name = "TITLE")
     private String title;
 
-    @Column(name = "TAGS")
-    private Object tags;
+
 
     @Column(name = "EDITORID")
     private String editorid;
@@ -70,19 +69,7 @@ public class News {
         this.title = title;
     }
 
-    /**
-     * @return TAGS
-     */
-    public Object getTags() {
-        return tags;
-    }
 
-    /**
-     * @param tags
-     */
-    public void setTags(Object tags) {
-        this.tags = tags;
-    }
 
     /**
      * @return EDITORID

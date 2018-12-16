@@ -27,8 +27,6 @@ public class Team {
     @Column(name = "INTRODUCTION")
     private String introduction;
 
-    @Column(name = "TAGS")
-    private Object tags;
 
     /**
      * @return TEAMID
@@ -128,17 +126,5 @@ public class Team {
         this.introduction = introduction;
     }
 
-    /**
-     * @return TAGS
-     */
-    public Object getTags() {
-        return tags;
-    }
 
-    /**
-     * @param tags
-     */
-    public void setTags(Object tags) {
-        this.tags = tags;
-    }
 }
