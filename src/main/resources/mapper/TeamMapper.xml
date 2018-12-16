@@ -12,7 +12,7 @@
     <result column="CREATEDATE" jdbcType="TIMESTAMP" property="createdate" />
     <result column="HEADSHOT" jdbcType="VARCHAR" property="headshot" />
     <result column="INTRODUCTION" jdbcType="VARCHAR" property="introduction" />
-    <result column="TAGS" jdbcType="ARRAY" property="tags" />
+
   </resultMap>
   <select id="findById" parameterType="BigDecimal" resultType="com.company.project.model.Team">
   SELECT * FROM team WHERE teamid=#{id}
