@@ -28,13 +28,12 @@ public class NewsController {
     @PostMapping("/add")
     public Result add(@RequestBody News news) {
 
-
         newsService.save(news);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/delete")
-    public Result delete(@RequestParam Integer id) {
+    public Result delete(@RequestBody Integer id) {
         newsService.deleteById(BigDecimal.valueOf(id));
         return ResultGenerator.genSuccessResult();
     }
@@ -45,27 +44,35 @@ public class NewsController {
         return ResultGenerator.genSuccessResult();
     }
 
-    @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
-        News news = newsService.findById(BigDecimal.valueOf(id));
-        return ResultGenerator.genSuccessResult(news);
+    public static class ID
+    {
+        Integer id=0;
     }
-    @PostMapping("/like")
-    public Result like(@RequestParam Integer newsid,@RequestParam String username) {
-        News news = newsService.findById(BigDecimal.valueOf(newsid));
+
+    @PostMapping("/detail")
+    public Result detail(@RequestBody ID id) {
+        News news = newsService.findById(BigDecimal.valueOf(id.id));
         return ResultGenerator.genSuccessResult(news);
     }
 
+
+   public static class ListParam
+    {
+       String sortedBy="";
+       Integer page=0;
+       Integer size=0;
+    }
+
     @PostMapping("/list")
-    public Result list(@RequestParam(defaultValue = "default") String sortedBy,@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
+    public Result list(ListParam listParam) {
+        PageHelper.startPage(listParam.page, listParam.size);
         List<News> list;
-        if(sortedBy.equals("contestTime"))
+        if(listParam.sortedBy.equals("contestTime"))
         {//未实现
             list = newsService.findAll();
 
         }
-        else if(sortedBy.equals("publishTime"))
+        else if(listParam.sortedBy.equals("publishTime"))
         {//未实现
             list = newsService.findAll();
 
