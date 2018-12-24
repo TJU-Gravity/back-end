@@ -113,12 +113,7 @@
             <artifactId>nekohtml</artifactId>
             <version>1.9.22</version>
         </dependency>
-        <!--cos-->
-        <dependency>
-            <groupId>com.qcloud</groupId>
-            <artifactId>cos_api</artifactId>
-            <version>4.7</version>
-        </dependency>
+
 
     </dependencies>
 

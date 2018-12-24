@@ -6,10 +6,7 @@ import com.company.project.model.Usernews;
 import com.company.project.service.UsernewsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -25,19 +22,24 @@ public class UsernewsController {
     @Resource
     private UsernewsService usernewsService;
 
+    public static class Follow
+    {
+        String username="";
+        Integer newsid=0;
+    }
     @PostMapping("/add")
-    public Result add(String username,Integer newsid) {
+    public Result add(Follow follow) {
         Usernews userNews=new Usernews();
         userNews.setAddtime(new Date());
-        userNews.setNewsid(BigDecimal.valueOf(newsid));
-        userNews.setUsername(username);
+        userNews.setNewsid(BigDecimal.valueOf(follow.newsid));
+        userNews.setUsername(follow.username);
         usernewsService.save(userNews);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/delete")
-    public Result delete(String username,Integer newsid) {
-        usernewsService.deleteLike(username,BigDecimal.valueOf(newsid));
+    public Result delete(Follow follow) {
+        usernewsService.deleteLike(follow.username,BigDecimal.valueOf(follow.newsid));
         return ResultGenerator.genSuccessResult();
     }
 
@@ -60,17 +62,24 @@ public class UsernewsController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
+    public static class ListParam
+    {
+        ListParam(){}
+        String username="";
+        Integer page=0;
+        Integer size=0;
+    }
     //未通过测试
     @PostMapping("/favorites")
-    public Result favorites(@RequestParam(defaultValue = "null") String username,@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        if(username.equals("null"))
+    public Result favorites(ListParam listParam) {
+        if(listParam.username.equals(""))
         {
             return ResultGenerator.genFailResult("need non null username");
         }
         else
         {
-            PageHelper.startPage(page, size);
-            List<News> list = usernewsService.getFavorites(username);
+            PageHelper.startPage(listParam.page, listParam.size);
+            List<News> list = usernewsService.getFavorites(listParam.username);
             PageInfo pageInfo = new PageInfo(list);
             return ResultGenerator.genSuccessResult(pageInfo);
 
