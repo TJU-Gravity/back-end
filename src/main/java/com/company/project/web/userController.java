@@ -3,6 +3,7 @@ import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
 import com.company.project.model.user;
 import com.company.project.service.userService;
+import com.company.project.web.model.MyRequestBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,8 @@ public class userController {
     private userService userService;
 
     @PostMapping("/add")
-    public Result add(user user) {
-        userService.save(user);
+    public Result add(@RequestBody user u) {
+        userService.addUser(u);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -45,8 +46,8 @@ public class userController {
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam String username) {
-        user user = userService.findByUsername(username);
+    public Result detail(@RequestBody MyRequestBody myRequestBody) {
+        user user = userService.findByUsername(myRequestBody.username);
         return ResultGenerator.genSuccessResult(user);
     }
 

@@ -1,8 +1,15 @@
 package com.company.project.web;
 import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
+import com.company.project.model.Reply;
+import com.company.project.service.ReplyService;
+import com.company.project.service.TeamService;
+import com.company.project.service.impl.ReplyServiceImpl;
+import com.company.project.service.impl.TeamServiceImpl;
+import com.company.project.service.userService;
 import com.company.project.web.model.MyRequestBody;
 import com.company.project.model.Post;
+import com.company.project.web.model.PostDetail;
 import com.company.project.web.model.PostResult;
 import com.company.project.service.PostService;
 import com.github.pagehelper.PageHelper;
@@ -10,6 +17,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -20,9 +28,17 @@ import java.util.List;
 public class PostController {
     @Resource
     private PostService postService;
+    @Resource
+    private TeamService teamService;
+
+    @Resource
+    private ReplyService replyService;
+    @Resource
+    private userService uService;
+
 
     @PostMapping("/add")
-    public Result add(Post post) {
+    public Result add(@RequestBody Post post) {
         postService.save(post);
         return ResultGenerator.genSuccessResult();
     }
@@ -40,16 +56,19 @@ public class PostController {
     }
 
     @PostMapping("/detail")
-    public Result detail(@RequestParam Integer id) {
-        Post post = postService.findById(id);
-        return ResultGenerator.genSuccessResult(post);
+    public Result detail(@RequestBody MyRequestBody body) {
+        PostDetail postDetail=new PostDetail();
+        postDetail.post=postService.findById(BigDecimal.valueOf(body.ID));
+        postDetail.replies=replyService.getReplys(body.ID);
+        postDetail.user=uService.findByUsername(postDetail.post.getPosterid());
+        postDetail.team=teamService.findById(postDetail.post.getTeamid());
+        return ResultGenerator.genSuccessResult(postDetail);
     }
 
 
     @PostMapping("/list")
     public Result list(@org.springframework.web.bind.annotation.RequestBody MyRequestBody myRequestBody) {
-
-
+        PageHelper.startPage(myRequestBody.page, myRequestBody.size);
         List<PostResult> list =postService.getList(myRequestBody);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);

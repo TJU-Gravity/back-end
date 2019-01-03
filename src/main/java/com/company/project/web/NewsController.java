@@ -54,7 +54,7 @@ public class NewsController {
 
 
     @PostMapping("/list")
-    public Result list(MyRequestBody myRequestBody) {
+    public Result list(@RequestBody MyRequestBody myRequestBody) {
         PageHelper.startPage(myRequestBody.page, myRequestBody.size);
         List<News> list;
         if(myRequestBody.sortedBy.equals("contestTime"))

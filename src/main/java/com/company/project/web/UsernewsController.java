@@ -29,7 +29,7 @@ public class UsernewsController {
         Integer newsid=0;
     }
     @PostMapping("/add")
-    public Result add(Follow follow) {
+    public Result add(@RequestBody Follow follow) {
         Usernews userNews=new Usernews();
         userNews.setAddtime(new Date());
         userNews.setNewsid(BigDecimal.valueOf(follow.newsid));
@@ -66,7 +66,7 @@ public class UsernewsController {
 
     //未通过测试
     @PostMapping("/favorites")
-    public Result favorites(@org.springframework.web.bind.annotation.RequestBody MyRequestBody myRequestBody) {
+    public Result favorites(@RequestBody MyRequestBody myRequestBody) {
         if(myRequestBody.username.equals(""))
         {
             return ResultGenerator.genFailResult("need non null username");

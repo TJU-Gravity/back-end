@@ -12,4 +12,5 @@ public interface TeamMapper extends Mapper<Team> {
 	public Team findById(BigDecimal id);
 
 	public void deleteById(BigDecimal id);
+	List<Team> findMyTeams(String username);
 }

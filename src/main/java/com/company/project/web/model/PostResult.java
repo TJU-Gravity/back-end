@@ -32,7 +32,7 @@ public class PostResult {
 
         public String postbody;
 
-        public String posternickname;
+        public String nickname;
 
 
 }

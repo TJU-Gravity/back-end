@@ -7,6 +7,7 @@ import com.company.project.service.TeamService;
 import com.company.project.service.userService;
 import com.company.project.service.tagService;
 import com.company.project.service.TeamuserService;
+import com.company.project.web.model.MyRequestBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -228,6 +229,16 @@ public class TeamController {
         }
         PageInfo pageInfo = new PageInfo(teamList);
         return ResultGenerator.genSuccessResult(pageInfo);
+    }
+
+    @PostMapping("/myteams")
+    public Result myTeam(@RequestBody MyRequestBody myRequestBody) {
+        PageHelper.startPage(myRequestBody.page, myRequestBody.size);
+
+        List<Team> list=teamService.findMyTeams(myRequestBody.username);
+
+
+        return ResultGenerator.genSuccessResult(list);
     }
 
 }

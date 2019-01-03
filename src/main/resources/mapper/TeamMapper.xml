@@ -20,4 +20,7 @@
   <delete id="deleteById" parameterType="BigDecimal">
   DELETE FROM team WHERE teamid=#{id}
   </delete>
+  <select id="findMyTeams" parameterType="String" resultType="com.company.project.model.Team">
+  SELECT teamid,teamname FROM team WHERE captainid=#{username}
+  </select>
   </mapper>

@@ -23,6 +23,10 @@ import javax.annotation.Resource;
 public class TeamServiceImpl extends AbstractService<Team> implements TeamService {
     @Resource
     private TeamMapper teamMapper;
+    public List<Team> findMyTeams(String username)
+    {
+        return teamMapper.findMyTeams(username);
+    }
     
     @Override
     public Team findById(BigDecimal id)

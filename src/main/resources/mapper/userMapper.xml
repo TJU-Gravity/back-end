@@ -21,4 +21,7 @@
   <select id="findByUsername" parameterType="String" resultType="com.company.project.model.user">
     SELECT * FROM guser WHERE username=#{username}
   </select>
+  <select id="addUser" parameterType="com.company.project.model.user" >
+    INSERT INTO guser ( username,nickname,pwd,gender,headshot,loc,phonenumber,introduction,email ) values(#{username},#{nickname},#{pwd},#{gender},#{headshot},#{loc},#{phonenumber},#{introduction},#{email})
+  </select>
 </mapper>

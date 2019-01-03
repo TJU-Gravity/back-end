@@ -22,6 +22,9 @@ public class userServiceImpl extends AbstractService<user> implements userServic
     {
         return guserMapper.findByUsername(username);
     }
-
+    public void addUser(user u)
+    {
+        guserMapper.addUser(u);
+    }
 
 }

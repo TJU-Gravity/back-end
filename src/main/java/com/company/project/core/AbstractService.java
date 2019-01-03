@@ -7,6 +7,7 @@ import tk.mybatis.mapper.entity.Condition;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -47,6 +48,10 @@ public abstract class AbstractService<T> implements Service<T> {
     public T findById(Integer id) {
         return mapper.selectByPrimaryKey(id);
     }
+    public T findById(BigDecimal id) {
+        return mapper.selectByPrimaryKey(id);
+    }
+
 
     @Override
     public T findBy(String fieldName, Object value) throws TooManyResultsException {
