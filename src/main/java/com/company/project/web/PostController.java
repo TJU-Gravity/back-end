@@ -1,14 +1,13 @@
 package com.company.project.web;
 import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
+import com.company.project.web.model.MyRequestBody;
 import com.company.project.model.Post;
+import com.company.project.web.model.PostResult;
 import com.company.project.service.PostService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -46,10 +45,12 @@ public class PostController {
         return ResultGenerator.genSuccessResult(post);
     }
 
+
     @PostMapping("/list")
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
-        PageHelper.startPage(page, size);
-        List<Post> list = postService.findAll();
+    public Result list(@org.springframework.web.bind.annotation.RequestBody MyRequestBody myRequestBody) {
+
+
+        List<PostResult> list =postService.getList(myRequestBody);
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }

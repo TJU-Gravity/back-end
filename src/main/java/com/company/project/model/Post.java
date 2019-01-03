@@ -15,8 +15,10 @@ public class Post {
     @Column(name = "POSTERID")
     private String posterid;
 
-    @Column(name = "JUDGETAG")
-    private Short judgetag;
+
+    @Column(name = "TEAMID")
+    private BigDecimal teamid;
+
 
     @Column(name = "POSTINGTIME")
     private Date postingtime;
@@ -76,17 +78,17 @@ public class Post {
     }
 
     /**
-     * @return JUDGETAG
+     * @return TEAMID
      */
-    public Short getJudgetag() {
-        return judgetag;
+    public BigDecimal getTeamid() {
+        return teamid;
     }
 
     /**
-     * @param judgetag
+     * @param teamid
      */
-    public void setJudgetag(Short judgetag) {
-        this.judgetag = judgetag;
+    public void setTeamid(BigDecimal teamid) {
+        this.teamid = teamid;
     }
 
     /**

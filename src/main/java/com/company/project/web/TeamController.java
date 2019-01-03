@@ -98,7 +98,7 @@ public class TeamController {
     //返回：团队列表
     @PostMapping("/teamList")
     public Result teamList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-    @RequestBody String param) {
+    @MyRequestBody String param) {
         PageHelper.startPage(page, size);
         
         //根据标签查询

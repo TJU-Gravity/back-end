@@ -5,10 +5,7 @@ import com.company.project.model.user;
 import com.company.project.service.userService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -38,6 +35,13 @@ public class userController {
     public Result update(user user) {
         userService.update(user);
         return ResultGenerator.genSuccessResult();
+    }
+    @PostMapping("/login")
+    public Result login(@RequestBody user u) {
+        user user = userService.findByUsername(u.getUsername());
+        if (user!=null&&user.getPwd().equals(u.getPwd()))
+            return ResultGenerator.genSuccessResult(user);
+        else return ResultGenerator.genFailResult("error");
     }
 
     @PostMapping("/detail")

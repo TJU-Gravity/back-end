@@ -8,11 +8,14 @@
     <id column="POSTID" jdbcType="NUMERIC" property="postid" />
     <result column="POSTTYPE" jdbcType="VARCHAR" property="posttype" />
     <result column="POSTERID" jdbcType="VARCHAR" property="posterid" />
-    <result column="JUDGETAG" jdbcType="NUMERIC" property="judgetag" />
+    <result column="TEAMID" jdbcType="NUMERIC" property="timeid" />
     <result column="POSTINGTIME" jdbcType="TIMESTAMP" property="postingtime" />
     <result column="TITLE" jdbcType="VARCHAR" property="title" />
     <result column="HITS" jdbcType="NUMERIC" property="hits" />
     <result column="LASTPOST" jdbcType="TIMESTAMP" property="lastpost" />
     <result column="POSTBODY" jdbcType="CLOB" property="postbody" />
   </resultMap>
+  <select id="getList" parameterType="com.company.project.dao.model.MyPage" resultType="com.company.project.web.model.PostResult">
+    select * from (select username,nickname,headshot from guser) as u join post limit #{start},#{size};
+  </select>
 </mapper>

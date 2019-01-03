@@ -1,6 +1,7 @@
 package com.company.project.web;
 import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
+import com.company.project.web.model.MyRequestBody;
 import com.company.project.model.News;
 import com.company.project.model.Usernews;
 import com.company.project.service.UsernewsService;
@@ -62,24 +63,18 @@ public class UsernewsController {
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
-    public static class ListParam
-    {
-        ListParam(){}
-        String username="";
-        Integer page=0;
-        Integer size=0;
-    }
+
     //未通过测试
     @PostMapping("/favorites")
-    public Result favorites(ListParam listParam) {
-        if(listParam.username.equals(""))
+    public Result favorites(@org.springframework.web.bind.annotation.RequestBody MyRequestBody myRequestBody) {
+        if(myRequestBody.username.equals(""))
         {
             return ResultGenerator.genFailResult("need non null username");
         }
         else
         {
-            PageHelper.startPage(listParam.page, listParam.size);
-            List<News> list = usernewsService.getFavorites(listParam.username);
+            PageHelper.startPage(myRequestBody.page, myRequestBody.size);
+            List<News> list = usernewsService.getFavorites(myRequestBody.username);
             PageInfo pageInfo = new PageInfo(list);
             return ResultGenerator.genSuccessResult(pageInfo);
 

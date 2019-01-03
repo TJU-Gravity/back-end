@@ -1,18 +1,16 @@
 package com.company.project.web;
 import com.company.project.core.Result;
 import com.company.project.core.ResultGenerator;
+import com.company.project.web.model.MyRequestBody;
 import com.company.project.model.News;
 import com.company.project.service.NewsService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
-import org.springframework.stereotype.Controller;
-
 
 
 /**
@@ -26,14 +24,14 @@ public class NewsController {
 
 
     @PostMapping("/add")
-    public Result add(@RequestBody News news) {
+    public Result add(@org.springframework.web.bind.annotation.RequestBody News news) {
 
         newsService.save(news);
         return ResultGenerator.genSuccessResult();
     }
 
     @PostMapping("/delete")
-    public Result delete(@RequestBody Integer id) {
+    public Result delete(@org.springframework.web.bind.annotation.RequestBody Integer id) {
         newsService.deleteById(BigDecimal.valueOf(id));
         return ResultGenerator.genSuccessResult();
     }
@@ -44,35 +42,27 @@ public class NewsController {
         return ResultGenerator.genSuccessResult();
     }
 
-    public static class ID
-    {
-        Integer id=0;
-    }
+
 
     @PostMapping("/detail")
-    public Result detail(@RequestBody ID id) {
-        News news = newsService.findById(BigDecimal.valueOf(id.id));
+    public Result detail(@org.springframework.web.bind.annotation.RequestBody MyRequestBody body) {
+        News news = newsService.findById(BigDecimal.valueOf(body.ID));
         return ResultGenerator.genSuccessResult(news);
     }
 
 
-   public static class ListParam
-    {
-       String sortedBy="";
-       Integer page=0;
-       Integer size=0;
-    }
+
 
     @PostMapping("/list")
-    public Result list(ListParam listParam) {
-        PageHelper.startPage(listParam.page, listParam.size);
+    public Result list(MyRequestBody myRequestBody) {
+        PageHelper.startPage(myRequestBody.page, myRequestBody.size);
         List<News> list;
-        if(listParam.sortedBy.equals("contestTime"))
+        if(myRequestBody.sortedBy.equals("contestTime"))
         {//未实现
             list = newsService.findAll();
 
         }
-        else if(listParam.sortedBy.equals("publishTime"))
+        else if(myRequestBody.sortedBy.equals("publishTime"))
         {//未实现
             list = newsService.findAll();
 
