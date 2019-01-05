@@ -7,12 +7,12 @@ import com.company.project.service.TeamService;
 import com.company.project.service.userService;
 import com.company.project.service.tagService;
 import com.company.project.service.TeamuserService;
-import com.company.project.web.model.MyRequestBody;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import tk.mybatis.mapper.entity.Condition;
 
+import org.apache.juli.logging.Log;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,17 +49,15 @@ public class TeamController {
     //参数：团队信息(id设为默认值0)
     @PostMapping("/createTeam")
     public Result createTeam(@RequestBody Team newTeam) {
-        //获取当前团队数量
-        int teamNum=teamService.selectCount(new Team());
-        //团队id
-        newTeam.setTeamid(BigDecimal.valueOf(teamNum+1));
-        //创建时间
+    	//teamid:自增
         Date date = new Date();// 获取当前时间 
         newTeam.setCreatedate(date);
         teamService.save(newTeam);
         //更新Teamuser表
         Teamuser teamuser=new Teamuser();
-        teamuser.setTeamid(BigDecimal.valueOf(teamNum+1));
+        //
+        int teamNum=teamService.selectCount(new Team())+1;
+        teamuser.setTeamid(BigDecimal.valueOf(teamNum));
         teamuser.setUsername(newTeam.getCaptainid());
         teamuser.setAdddate(date);
         teamUserService.save(teamuser);
@@ -119,8 +117,10 @@ public class TeamController {
     //参数：团队id
     //返回：团队信息
     @PostMapping("/teamDetail")
-    public Result teamDetail(@RequestParam Integer id) {
-        Team team = teamService.findById(BigDecimal.valueOf(id));
+    public Result teamDetail(@RequestBody String teamid) {
+    //	System.out.println("I accept:"+teamid);
+    	Integer teamId=Integer.valueOf(teamid);
+    	Team team=teamService.findById(BigDecimal.valueOf(teamId));
         JSONObject teamInfo=new JSONObject();
         //队名
         teamInfo.put("teamname",team.getTeamname());
@@ -212,33 +212,28 @@ public class TeamController {
     //参数：用户名
     //返回：团队列表
     @PostMapping("/myTeamList")
-    public Result myTeamList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-    @RequestBody String userName) {
-        PageHelper.startPage(page, size);
+    public Result myTeamList(@RequestBody user u) {
+      
         
         //根据用户名查询
         //Condition condition=new Condition(Teamuser.class);
         
         //condition.createCriteria().andCondition("username="+userName);
-        List<Teamuser> teamUserList=teamUserService.findByUsername(userName);
-        List<Team> teamList=new ArrayList();
+    	String username=u.getUsername();
+        List<Teamuser> teamUserList=teamUserService.findByUsername(username);
+        List<JSONObject> teamList=new ArrayList();
         //根据teamId查询team信息
         for(Teamuser x:teamUserList)
         {
-            teamList.add(teamService.findById(x.getTeamid()));
+        	JSONObject teamInfo=new JSONObject();
+            teamInfo.put("teamid",teamService.findById(x.getTeamid()).getTeamid());
+            teamInfo.put("teamname",teamService.findById(x.getTeamid()).getTeamname());
+            teamInfo.put("headshot",teamService.findById(x.getTeamid()).getHeadshot());
+//            System.out.println(teamInfo);
+            teamList.add(teamInfo);
         }
-        PageInfo pageInfo = new PageInfo(teamList);
-        return ResultGenerator.genSuccessResult(pageInfo);
-    }
 
-    @PostMapping("/myteams")
-    public Result myTeam(@RequestBody MyRequestBody myRequestBody) {
-        PageHelper.startPage(myRequestBody.page, myRequestBody.size);
-
-        List<Team> list=teamService.findMyTeams(myRequestBody.username);
-
-
-        return ResultGenerator.genSuccessResult(list);
+        return ResultGenerator.genSuccessResult(teamList);
     }
 
 }
