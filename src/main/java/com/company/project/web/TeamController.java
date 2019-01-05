@@ -79,9 +79,6 @@ public class TeamController {
         Teamuser teamuser=new Teamuser();
         teamuser.setTeamid(BigDecimal.valueOf(teamId));
         teamuser.setUsername(username);
-        //获取系统当前时间
-        //SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间 
-        //sdf.applyPattern("yyyy-MM-dd");
         
         Date date = new Date();// 获取当前时间 
         teamuser.setAdddate(date);
@@ -236,7 +233,6 @@ public class TeamController {
             teamInfo.put("teamid",teamService.findById(x.getTeamid()).getTeamid());
             teamInfo.put("teamname",teamService.findById(x.getTeamid()).getTeamname());
             teamInfo.put("headshot",teamService.findById(x.getTeamid()).getHeadshot());
-//            System.out.println(teamInfo);
             teamList.add(teamInfo);
         }
 
