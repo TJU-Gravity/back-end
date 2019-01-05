@@ -50,17 +50,22 @@ public class TeamController {
     @PostMapping("/createTeam")
     public Result createTeam(@RequestBody Team newTeam) {
     	//teamid:自增
+    	System.out.println(newTeam.getTeamname());
         Date date = new Date();// 获取当前时间 
         newTeam.setCreatedate(date);
         teamService.save(newTeam);
-        //更新Teamuser表
-        Teamuser teamuser=new Teamuser();
-        //
-        int teamNum=teamService.selectCount(new Team())+1;
-        teamuser.setTeamid(BigDecimal.valueOf(teamNum));
-        teamuser.setUsername(newTeam.getCaptainid());
-        teamuser.setAdddate(date);
-        teamUserService.save(teamuser);
+        //更新Teamuser表---写成触发器-----
+//        Teamuser teamuser=new Teamuser();
+//       
+//        System.out.println("teamid:"+newTeam.getTeamid());
+//        
+//        int teamNum=teamService.selectCount(new Team())+1;
+//        System.out.println("teamnum:"+teamNum);
+//
+//        teamuser.setTeamid(BigDecimal.valueOf(teamNum));
+//        teamuser.setUsername(newTeam.getCaptainid());
+//        teamuser.setAdddate(date);
+//        teamUserService.save(teamuser);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -118,10 +123,11 @@ public class TeamController {
     //返回：团队信息
     @PostMapping("/teamDetail")
     public Result teamDetail(@RequestBody String teamid) {
-    //	System.out.println("I accept:"+teamid);
+    	System.out.println("I accept:"+teamid);
     	Integer teamId=Integer.valueOf(teamid);
     	Team team=teamService.findById(BigDecimal.valueOf(teamId));
         JSONObject teamInfo=new JSONObject();
+        teamInfo.put("teamid",teamid);
         //队名
         teamInfo.put("teamname",team.getTeamname());
         //队长姓名
@@ -169,9 +175,10 @@ public class TeamController {
     //请求解散团队
     //参数：团队id
     @PostMapping("/deleteTeam")
-    public Result deleteTeam(@RequestParam Integer id) {
-        //更新Team表
-        teamService.deleteById(BigDecimal.valueOf(id));
+    public Result deleteTeam(@RequestBody String id) {
+    	Integer teamid=Integer.valueOf(id);
+    	//更新Team表
+        teamService.deleteById(BigDecimal.valueOf(teamid));
         //更新TeamUser表
         Condition condition=new Condition(Teamuser.class);
         String teamIdStr=id.toString();
