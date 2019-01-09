@@ -40,6 +40,11 @@ public class TeamServiceImpl extends AbstractService<Team> implements TeamServic
     	teamMapper.deleteById(id);
     }
     
+    @Override
+	public void insertTeam(Team newTeam) {
+		teamMapper.insertTeam(newTeam);
+		
+	}
     
   
 

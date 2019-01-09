@@ -17,10 +17,13 @@
   <select id="findById" parameterType="BigDecimal" resultType="com.company.project.model.Team">
   SELECT * FROM team WHERE teamid=#{id}
   </select>
+ <insert id="insertTeam" parameterType="com.company.project.model.Team">
+        <selectKey keyProperty="teamid" order="AFTER" resultType="BigDecimal">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into team(teamid,teamname,captainid,membernum,createdate,headshot,introduction) values (#{teamid},#{teamname},#{captainid},#{membernum},#{createdate},#{headshot},#{introduction})
+</insert>
   <delete id="deleteById" parameterType="BigDecimal">
   DELETE FROM team WHERE teamid=#{id}
   </delete>
-  <select id="findMyTeams" parameterType="String" resultType="com.company.project.model.Team">
-  SELECT teamid,teamname FROM team WHERE captainid=#{username}
-  </select>
   </mapper>

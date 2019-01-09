@@ -53,19 +53,23 @@ public class TeamController {
     	System.out.println(newTeam.getTeamname());
         Date date = new Date();// 获取当前时间 
         newTeam.setCreatedate(date);
-        teamService.save(newTeam);
+        int teamNum=teamService.selectCount(new Team())+1;
+        System.out.println("teamnum1:"+teamNum);
+        teamService.insertTeam(newTeam);
+       // teamService.save(newTeam);
+        
         //更新Teamuser表---写成触发器-----
-//        Teamuser teamuser=new Teamuser();
-//       
-//        System.out.println("teamid:"+newTeam.getTeamid());
-//        
-//        int teamNum=teamService.selectCount(new Team())+1;
-//        System.out.println("teamnum:"+teamNum);
-//
-//        teamuser.setTeamid(BigDecimal.valueOf(teamNum));
-//        teamuser.setUsername(newTeam.getCaptainid());
-//        teamuser.setAdddate(date);
-//        teamUserService.save(teamuser);
+        Teamuser teamuser=new Teamuser();
+       
+        System.out.println("teamid:"+newTeam.getTeamid());
+        
+        int teamNum2=teamService.selectCount(new Team())+1;
+        System.out.println("teamnum2:"+teamNum2);
+        Team test=teamService.findById(newTeam.getTeamid());
+        teamuser.setTeamid(test.getTeamid());
+        teamuser.setUsername(newTeam.getCaptainid());
+        teamuser.setAdddate(date);
+        teamUserService.save(teamuser);
         return ResultGenerator.genSuccessResult();
     }
 
@@ -79,6 +83,9 @@ public class TeamController {
         Teamuser teamuser=new Teamuser();
         teamuser.setTeamid(BigDecimal.valueOf(teamId));
         teamuser.setUsername(username);
+        //获取系统当前时间
+        //SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间 
+        //sdf.applyPattern("yyyy-MM-dd");
         
         Date date = new Date();// 获取当前时间 
         teamuser.setAdddate(date);
@@ -233,6 +240,7 @@ public class TeamController {
             teamInfo.put("teamid",teamService.findById(x.getTeamid()).getTeamid());
             teamInfo.put("teamname",teamService.findById(x.getTeamid()).getTeamname());
             teamInfo.put("headshot",teamService.findById(x.getTeamid()).getHeadshot());
+//            System.out.println(teamInfo);
             teamList.add(teamInfo);
         }
 
