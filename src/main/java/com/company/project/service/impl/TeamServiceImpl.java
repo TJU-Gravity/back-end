@@ -1,6 +1,7 @@
 package com.company.project.service.impl;
 
 import com.company.project.dao.TeamMapper;
+import com.company.project.dao.TeamuserMapper;
 import com.company.project.model.News;
 import com.company.project.model.Team;
 import com.company.project.model.Teamuser;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -23,29 +25,25 @@ import javax.annotation.Resource;
 public class TeamServiceImpl extends AbstractService<Team> implements TeamService {
     @Resource
     private TeamMapper teamMapper;
+
     public List<Team> findMyTeams(String username)
     {
         return teamMapper.findMyTeams(username);
     }
-    
+
+
+
+
     @Override
-    public Team findById(BigDecimal id)
-    {
-    	return teamMapper.findById(id);
+    public BigDecimal newTeam(Team t) {
+
+        t.setCreatedate(new Date());
+        teamMapper.newTeam(t);
+
+        return t.getTeamid();
+
     }
-    
-    @Override
-    public void deleteById(BigDecimal id)
-    {
-    	teamMapper.deleteById(id);
-    }
-    
-    @Override
-	public void insertTeam(Team newTeam) {
-		teamMapper.insertTeam(newTeam);
-		
-	}
-    
-  
+
+
 
 }

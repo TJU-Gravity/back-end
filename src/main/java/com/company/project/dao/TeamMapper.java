@@ -9,9 +9,8 @@ import java.util.List;
 
 public interface TeamMapper extends Mapper<Team> {
 
-	public Team findById(BigDecimal id);
 
-	public void deleteById(BigDecimal id);
+	 void newTeam(Team t);
 	List<Team> findMyTeams(String username);
-	public void insertTeam(Team newTeam);
+
 }

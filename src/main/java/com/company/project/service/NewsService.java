@@ -11,6 +11,4 @@ import java.util.List;
  */
 public interface NewsService extends Service<News> {
 
-    public News findById(BigDecimal id);
-    public void deleteById(BigDecimal id);
 }

@@ -22,14 +22,5 @@ public class NewsServiceImpl extends AbstractService<News> implements NewsServic
     private NewsMapper newsMapper;
 
 
-    @Override
-    public News findById(BigDecimal id){
-        return newsMapper.findById(id);
 
-    }
-    @Override
-    public void deleteById(BigDecimal id){
-         newsMapper.deleteById(id);
-
-    }
 }

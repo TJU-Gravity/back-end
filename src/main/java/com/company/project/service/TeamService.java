@@ -13,7 +13,10 @@ import com.company.project.core.Service;
  */
 public interface TeamService extends Service<Team> {
 	List<Team> findMyTeams(String username);
-	    public Team findById(BigDecimal id);
-	    public void deleteById(BigDecimal id);
-		public void insertTeam(Team newTeam);
+
+	BigDecimal newTeam(Team t);
+
+
+
+
 }

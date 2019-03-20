@@ -14,16 +14,12 @@
     <result column="INTRODUCTION" jdbcType="VARCHAR" property="introduction" />
 
   </resultMap>
-  <select id="findById" parameterType="BigDecimal" resultType="com.company.project.model.Team">
-  SELECT * FROM team WHERE teamid=#{id}
-  </select>
- <insert id="insertTeam" parameterType="com.company.project.model.Team">
-        <selectKey keyProperty="teamid" order="AFTER" resultType="BigDecimal">
-            select LAST_INSERT_ID()
-        </selectKey>
-        insert into team(teamid,teamname,captainid,membernum,createdate,headshot,introduction) values (#{teamid},#{teamname},#{captainid},#{membernum},#{createdate},#{headshot},#{introduction})
-</insert>
-  <delete id="deleteById" parameterType="BigDecimal">
-  DELETE FROM team WHERE teamid=#{id}
-  </delete>
+
+    <select id="findMyTeams" parameterType="String" resultType="com.company.project.model.Team">
+        select team.teamID, teamname, captainid, membernum, createdate, headshot, introduction from (team join teamuser) where username=#{username}
+    </select>
+    <insert id="newTeam" parameterType="Team" keyProperty="id" useGeneratedKeys="true">
+        insert into team(teamname,captainid,membernum,createdate,headshot,introduction) value (#{teamname},#{captainid},#{membernum},#{createdate},#{headshot}.#{introduction})
+    </insert>
+
   </mapper>

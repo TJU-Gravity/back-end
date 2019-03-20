@@ -37,6 +37,11 @@ public abstract class AbstractService<T> implements Service<T> {
         mapper.deleteByPrimaryKey(id);
     }
 
+    public void deleteById(BigDecimal id) {
+        mapper.deleteByPrimaryKey(id);
+    }
+
+
     public void deleteByIds(String ids) {
         mapper.deleteByIds(ids);
     }

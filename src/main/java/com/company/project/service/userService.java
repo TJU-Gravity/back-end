@@ -13,4 +13,5 @@ import java.util.List;
 public interface userService extends Service<user> {
     public user findByUsername(String username);
     public void addUser(user u);
+
 }

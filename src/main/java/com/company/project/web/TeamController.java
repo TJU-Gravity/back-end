@@ -7,8 +7,10 @@ import com.company.project.service.TeamService;
 import com.company.project.service.userService;
 import com.company.project.service.tagService;
 import com.company.project.service.TeamuserService;
+import com.company.project.web.model.TeamDetail;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.company.project.web.model.MyRequestBody;
 
 import tk.mybatis.mapper.entity.Condition;
 
@@ -39,136 +41,74 @@ public class TeamController {
     private TeamService teamService;
     @Resource
     private TeamuserService teamUserService;
-    @Resource
-    private userService userService;
-    @Resource
-    private tagService tagService;
+
     
     //1.
     //请求创建团队
-    //参数：团队信息(id设为默认值0)
+    //参数：team
     @PostMapping("/createTeam")
     public Result createTeam(@RequestBody Team newTeam) {
-    	//teamid:自增
-    	System.out.println(newTeam.getTeamname());
-        Date date = new Date();// 获取当前时间 
-        newTeam.setCreatedate(date);
-        int teamNum=teamService.selectCount(new Team())+1;
-        System.out.println("teamnum1:"+teamNum);
-        teamService.insertTeam(newTeam);
-       // teamService.save(newTeam);
-        
-        //更新Teamuser表---写成触发器-----
-        Teamuser teamuser=new Teamuser();
-       
-        System.out.println("teamid:"+newTeam.getTeamid());
-        
-        int teamNum2=teamService.selectCount(new Team())+1;
-        System.out.println("teamnum2:"+teamNum2);
-        Team test=teamService.findById(newTeam.getTeamid());
-        teamuser.setTeamid(test.getTeamid());
-        teamuser.setUsername(newTeam.getCaptainid());
-        teamuser.setAdddate(date);
-        teamUserService.save(teamuser);
+        BigDecimal teamId=teamService.newTeam(newTeam);
+        teamUserService.save(new Teamuser(teamId,newTeam.getCaptainid()));
         return ResultGenerator.genSuccessResult();
     }
 
   
     //2.
     //请求加入团队
-    //参数：用户名，团队id
+    //参数：username,ID
+    //OK
     @PostMapping("/addTeammate")
-    public Result addTeammate(@RequestParam String username,@RequestParam int teamId) {
-        //插入TeamUser表
-        Teamuser teamuser=new Teamuser();
-        teamuser.setTeamid(BigDecimal.valueOf(teamId));
-        teamuser.setUsername(username);
-        //获取系统当前时间
-        //SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间 
-        //sdf.applyPattern("yyyy-MM-dd");
-        
-        Date date = new Date();// 获取当前时间 
-        teamuser.setAdddate(date);
-        teamUserService.save(teamuser);
-
-        //更新Team表(membernum)
-        Team team=teamService.findById(BigDecimal.valueOf(teamId));
-        team.setMembernum((short)(team.getMembernum()+1));
-        teamService.update(team);
+    public Result addTeammate(@RequestBody MyRequestBody body) {
+        Team t=teamService.findById(BigDecimal.valueOf(body.ID));
+        t.setMembernum((short)(t.getMembernum()+1));
+        try {
+            teamService.update(t);
+            Teamuser teamuser = new Teamuser(BigDecimal.valueOf(body.ID), body.username);
+            teamUserService.save(teamuser);
+        }catch (Exception e)
+        {
+            return ResultGenerator.genFailResult("添加队员失败");
+        }
 
         return ResultGenerator.genSuccessResult();
     }
 
-    /*
-    //3.
-    //请求查询团队列表
-    //参数：团队类型
-    //返回：团队列表
-    @PostMapping("/teamList")
-    public Result teamList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size,
-    @MyRequestBody String param) {
-        PageHelper.startPage(page, size);
-        
-        //根据标签查询
-        Condition condition=new Condition(Team.class);
-        
-        condition.createCriteria().andCondition();
-        List<Team> list=teamUserService.findByCondition(condition);
 
-        //需要返回什么信息?
+    //3.
+    //我的团队列表
+    //username
+    //List<Team>
+    //OK
+    @PostMapping("/teamList")
+    public Result teamList(@RequestBody MyRequestBody param) {
+        PageHelper.startPage(param.page, param.size);
+
+        List<Team> list=teamService.findMyTeams(param.username);
+
         PageInfo pageInfo = new PageInfo(list);
         return ResultGenerator.genSuccessResult(pageInfo);
     }
-    */
+
 
     //4.
     //请求查询团队信息：基本信息+队员信息
-    //参数：团队id
-    //返回：团队信息
+    //ID
+    //teamDetail
+    //OK
     @PostMapping("/teamDetail")
-    public Result teamDetail(@RequestBody String teamid) {
-    	System.out.println("I accept:"+teamid);
-    	Integer teamId=Integer.valueOf(teamid);
-    	Team team=teamService.findById(BigDecimal.valueOf(teamId));
-        JSONObject teamInfo=new JSONObject();
-        teamInfo.put("teamid",teamid);
-        //队名
-        teamInfo.put("teamname",team.getTeamname());
-        //队长姓名
-        teamInfo.put("captainName",team.getCaptainid());
-        //创建时间
-        teamInfo.put("createDate",team.getCreatedate());
-        //团队头像url
-        teamInfo.put("headshot",team.getHeadshot());
-        //成员数量
-        int membernum=team.getMembernum();
-        teamInfo.put("membernum",membernum);
-        //团队简介
-        teamInfo.put("introduction",team.getIntroduction());
+    public Result teamDetail(@RequestBody MyRequestBody param) {
+        TeamDetail teamDetail=new TeamDetail();
+    	teamDetail.team=teamService.findById(BigDecimal.valueOf(param.ID));
+        teamDetail.teamMembers=teamUserService.findTeamMembers(BigDecimal.valueOf(param.ID));
 
-        //查询TeamUser中的队员信息
-        Condition condition=new Condition(Teamuser.class);
-        String teamIdStr=String.valueOf(team.getTeamid());
-        //查询条件
-        condition.createCriteria().andCondition("teamid="+teamIdStr);
-        //获取成员列表
-        List<Teamuser> list=teamUserService.findByCondition(condition);
-        String[] userlist=new String[membernum];
-        int index=0;
-        for(Teamuser x:list)
-        {
-            userlist[index]=x.getUsername();
-            index=index+1;
-        }
-        teamInfo.put("userlist",userlist);
-
-        return ResultGenerator.genSuccessResult(teamInfo);
+        return ResultGenerator.genSuccessResult(teamDetail);
     }
 
 
     //5.
     //修改团队信息
-    //参数：团队信息
+    //team
     @PostMapping("/updateTeam")
     public Result updateTeam(@RequestBody Team team){
         teamService.update(team);
@@ -177,74 +117,33 @@ public class TeamController {
 
     //6.
     //请求解散团队
-    //参数：团队id
+    //ID
+    //OK
     @PostMapping("/deleteTeam")
-    public Result deleteTeam(@RequestBody String id) {
-    	Integer teamid=Integer.valueOf(id);
-    	//更新Team表
-        teamService.deleteById(BigDecimal.valueOf(teamid));
-        //更新TeamUser表
-        Condition condition=new Condition(Teamuser.class);
-        String teamIdStr=id.toString();
-        condition.createCriteria().andCondition("teamid="+teamIdStr);
-        List<Teamuser> list=teamUserService.findByCondition(condition);
-        List<String> userlist;
-        for(Teamuser x:list)
-        {
-        teamUserService.delete(x);
-        }
+    public Result deleteTeam(@RequestBody MyRequestBody param) {
 
+        teamService.deleteById(new BigDecimal(param.ID));
         return ResultGenerator.genSuccessResult();
     }
 
     //7.
     //请求移除队员
-    //参数：队员名字,团队id
-//    @PostMapping("/deleteTeammate")
-//    public Result deleteTeammate(@RequestParam String userName,@RequestParam Integer teamId) {
-//        
-//        //删除TeamUser表
-//        Teamuser teamuser=new Teamuser();
-//        List<Teamuser> deleteList=teamUserService.findTeamuser(userName,BigDecimal.valueOf(teamId));
-//        for(Teamuser d:deleteList)
-//        {
-//        	teamUserService.delete(d);
-//        }
-//        //更新Team表(membernum)
-//        Team team=teamService.findById(BigDecimal.valueOf(teamId));
-//        team.setMembernum((short)(team.getMembernum()-1));
-//        teamService.update(team);
-//
-//        return ResultGenerator.genSuccessResult();
-//    } 
-    
-    //8.
-    //请求查询某个用户的团队列表
-    //参数：用户名
-    //返回：团队列表
-    @PostMapping("/myTeamList")
-    public Result myTeamList(@RequestBody user u) {
-      
-        
-        //根据用户名查询
-        //Condition condition=new Condition(Teamuser.class);
-        
-        //condition.createCriteria().andCondition("username="+userName);
-    	String username=u.getUsername();
-        List<Teamuser> teamUserList=teamUserService.findByUsername(username);
-        List<JSONObject> teamList=new ArrayList();
-        //根据teamId查询team信息
-        for(Teamuser x:teamUserList)
-        {
-        	JSONObject teamInfo=new JSONObject();
-            teamInfo.put("teamid",teamService.findById(x.getTeamid()).getTeamid());
-            teamInfo.put("teamname",teamService.findById(x.getTeamid()).getTeamname());
-            teamInfo.put("headshot",teamService.findById(x.getTeamid()).getHeadshot());
-//            System.out.println(teamInfo);
-            teamList.add(teamInfo);
-        }
-
-        return ResultGenerator.genSuccessResult(teamList);
+    //username,ID
+    //OK
+   @PostMapping("/removeTeammate")
+   public Result deleteTeammate(@RequestBody MyRequestBody body) {
+        teamUserService.removeTeammate(body.username,BigDecimal.valueOf(body.ID));
+        return ResultGenerator.genSuccessResult();
+   }
+//新建post时获取的列表？
+    @PostMapping("/myteams")
+    public Result myTeams(@RequestBody MyRequestBody body) {
+        List<Team> list =teamUserService.myTeams(body.username);
+        return ResultGenerator.genSuccessResult(list);
     }
+
+
+
+
 
 }

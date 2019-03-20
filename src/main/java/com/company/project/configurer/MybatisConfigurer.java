@@ -19,7 +19,7 @@ import java.util.Properties;
 
 import static com.company.project.core.ProjectConstant.*;
 
-/**
+/*
  * Mybatis & Mapper & PageHelper 配置
  */
 @Configuration

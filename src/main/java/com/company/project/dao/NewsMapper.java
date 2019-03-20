@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface NewsMapper extends Mapper<News> {
 
-    public News findById(BigDecimal id);
-    public void deleteById(BigDecimal id);
+    News findById(BigDecimal id);
+
 }

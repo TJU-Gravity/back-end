@@ -5,6 +5,15 @@ import java.util.Date;
 import javax.persistence.*;
 
 public class Teamuser {
+    public Teamuser(BigDecimal teamid,String username)
+    {
+        super();
+        this.teamid=teamid;
+        this.username=username;
+        this.adddate=new Date();
+
+    }
+    public Teamuser(){}
     @Id
     @Column(name = "TEAMID")
     private BigDecimal teamid;

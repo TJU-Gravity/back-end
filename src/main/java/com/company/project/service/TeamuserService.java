@@ -1,10 +1,12 @@
 package com.company.project.service;
+import com.company.project.model.Team;
 import com.company.project.model.Teamuser;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import com.company.project.core.Service;
+import com.company.project.model.user;
 
 
 /**
@@ -12,8 +14,10 @@ import com.company.project.core.Service;
  */
 public interface TeamuserService extends Service<Teamuser> {
 
-	public List<Teamuser> findByUsername(String userName);
-
-	public List<Teamuser> findTeamuser(String userName, BigDecimal bigDecimal);
+	List<Teamuser> findByUsername(String userName);
+	 List<user> findTeamMembers(BigDecimal teamId);
+	 void removeTeammate(String username,BigDecimal teamId);
+	List<Team> myTeams(String usernmae);
+ List<Teamuser> findTeamuser(String userName, BigDecimal bigDecimal);
 
 }

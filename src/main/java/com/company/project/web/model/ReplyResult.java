@@ -15,6 +15,7 @@ public class ReplyResult {
 
     public Date postingtime;
 
+
     public String replybody;
 
     public String nickname;
